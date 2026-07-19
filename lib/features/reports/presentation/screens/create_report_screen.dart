@@ -117,6 +117,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
     }
   }
 
+
   Future<void> _enviarReporte() async {
     if (_tituloCtrl.text.isEmpty || _descCtrl.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Completa título y descripción')));

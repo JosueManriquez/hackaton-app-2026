@@ -20,6 +20,7 @@ class MyReportsScreen extends StatelessWidget {
       );
     }
 
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mis Reportes'),
