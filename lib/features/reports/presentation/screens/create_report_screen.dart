@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
 
   XFile? _imagenSeleccionada;
   Position? _ubicacion;
+  String? _direccionAproximada;
 
   bool _isCargando = true; // Empieza en true para cargar categorías
   final ReportsRepository _repo = ReportsRepository();
@@ -107,6 +109,26 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
 
     try {
       _ubicacion = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      
+      // Intentar obtener la dirección de las coordenadas
+      try {
+        final Geocoding geocoding = Geocoding();
+        List<Placemark> placemarks = await geocoding.placemarkFromCoordinates(_ubicacion!.latitude, _ubicacion!.longitude);
+        if (placemarks.isNotEmpty) {
+          Placemark place = placemarks.first;
+          final calle = place.street ?? place.name ?? place.subLocality ?? '';
+          final ciudad = place.locality ?? place.subAdministrativeArea ?? place.administrativeArea ?? '';
+          if (calle.isNotEmpty && ciudad.isNotEmpty) {
+            _direccionAproximada = '$calle, $ciudad';
+          } else {
+            _direccionAproximada = '${place.name ?? ''}, ${place.country ?? ''}';
+          }
+        }
+      } catch (e) {
+        // Si falla la geocodificación inversa, nos quedamos con lat/lng
+        _direccionAproximada = null;
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ubicación obtenida con éxito')));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error obteniendo GPS: $e')));
@@ -160,6 +182,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
         descripcion: _descCtrl.text,
         lat: _ubicacion!.latitude,
         lng: _ubicacion!.longitude,
+        locationStr: _direccionAproximada ?? 'Lat: ${_ubicacion!.latitude.toStringAsFixed(4)}, Lng: ${_ubicacion!.longitude.toStringAsFixed(4)}',
         fotoUrl: fotoUrl,
         categoria: _categoriaSeleccionada ?? 'General',
         prioridad: _prioridadSeleccionada,
