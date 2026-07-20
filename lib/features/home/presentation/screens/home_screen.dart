@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../reports/data/reports_repository.dart';
 import '../../../reports/domain/models/report_model.dart';
@@ -32,6 +33,33 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('La Paz Conecta IA'),
         elevation: 2,
+        actions: [
+          if (user != null)
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('usuarios')
+                  .doc(user.uid)
+                  .collection('notificaciones')
+                  .where('leida', isEqualTo: false)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                int unreadCount = 0;
+                if (snapshot.hasData) {
+                  unreadCount = snapshot.data!.docs.length;
+                }
+                return IconButton(
+                  icon: Badge(
+                    isLabelVisible: unreadCount > 0,
+                    label: Text(unreadCount.toString()),
+                    child: const Icon(Icons.notifications),
+                  ),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsScreen()));
+                  },
+                );
+              },
+            ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -64,14 +92,42 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             const Divider(),
-            ListTile(
-              leading: const Icon(Icons.notifications),
-              title: const Text('Notificaciones'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsScreen()));
-              },
-            ),
+            if (user != null)
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('usuarios')
+                    .doc(user.uid)
+                    .collection('notificaciones')
+                    .where('leida', isEqualTo: false)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  int unreadCount = 0;
+                  if (snapshot.hasData) {
+                    unreadCount = snapshot.data!.docs.length;
+                  }
+                  return ListTile(
+                    leading: Badge(
+                      isLabelVisible: unreadCount > 0,
+                      label: Text(unreadCount.toString()),
+                      child: const Icon(Icons.notifications),
+                    ),
+                    title: const Text('Notificaciones'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsScreen()));
+                    },
+                  );
+                },
+              )
+            else
+              ListTile(
+                leading: const Icon(Icons.notifications),
+                title: const Text('Notificaciones'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsScreen()));
+                },
+              ),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.exit_to_app, color: Colors.red),
@@ -148,7 +204,8 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
-        return Padding(
+        return Container(
+          width: double.infinity,
           padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -181,11 +238,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
                     reporte.fotoUrl,
-                    height: 150,
+                    height: 200,
                     width: double.infinity,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) => Container(
-                      height: 150,
+                      height: 200,
+                      width: double.infinity,
                       color: Colors.grey[200],
                       child: const Icon(Icons.broken_image, size: 50, color: Colors.grey),
                     ),

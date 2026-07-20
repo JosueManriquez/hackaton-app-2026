@@ -31,7 +31,23 @@ class ReportsRepository {
     required String categoria,
     required String prioridad,
   }) async {
+    final counterRef = _firestore.collection('sistema').doc('contadores');
+    
+    final int newSequence = await _firestore.runTransaction((transaction) async {
+      final snapshot = await transaction.get(counterRef);
+      int currentCount = 0;
+      if (snapshot.exists && snapshot.data() != null && snapshot.data()!.containsKey('totalReportes')) {
+        currentCount = snapshot.get('totalReportes') as int;
+      }
+      final nextCount = currentCount + 1;
+      transaction.set(counterRef, {'totalReportes': nextCount}, SetOptions(merge: true));
+      return nextCount;
+    });
+    
+    final String ticketIdStr = 'REP-${newSequence.toString().padLeft(5, '0')}';
+
     await _firestore.collection('reportes').add({
+      'ticketId': ticketIdStr,
       'ciudadanoId': ciudadanoId,
       'titulo': titulo,
       'descripcion': descripcion,
@@ -42,6 +58,13 @@ class ReportsRepository {
       'fecha': FieldValue.serverTimestamp(),
       'categoria': categoria,
       'prioridad': prioridad,
+      'historial': [
+        {
+          'accion': 'Reporte Creado',
+          'actor': 'Ciudadano',
+          'fecha': Timestamp.now(),
+        }
+      ],
     });
   }
 }

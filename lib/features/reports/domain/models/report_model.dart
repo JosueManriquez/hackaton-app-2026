@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ReportModel {
   final String id;
+  final String ticketId;
   final String ciudadanoId;
   final String titulo;
   final String descripcion;
@@ -14,6 +15,7 @@ class ReportModel {
 
   ReportModel({
     required this.id,
+    required this.ticketId,
     required this.ciudadanoId,
     required this.titulo,
     required this.descripcion,
@@ -39,6 +41,7 @@ class ReportModel {
 
     return ReportModel(
       id: doc.id,
+      ticketId: data['ticketId'] ?? '',
       ciudadanoId: data['ciudadanoId'] ?? '',
       titulo: data['titulo'] ?? 'Sin título',
       descripcion: data['descripcion'] ?? '',
