@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+<<<<<<< HEAD
 import 'package:cloud_firestore/cloud_firestore.dart';
+=======
+>>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../reports/data/reports_repository.dart';
 import '../../../reports/domain/models/report_model.dart';
@@ -33,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('La Paz Conecta IA'),
         elevation: 2,
+<<<<<<< HEAD
         actions: [
           if (user != null)
             StreamBuilder<QuerySnapshot>(
@@ -60,6 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
         ],
+=======
+>>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e
       ),
       drawer: Drawer(
         child: ListView(
@@ -92,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             const Divider(),
+<<<<<<< HEAD
             if (user != null)
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
@@ -128,6 +135,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsScreen()));
                 },
               ),
+=======
+            ListTile(
+              leading: const Icon(Icons.notifications),
+              title: const Text('Notificaciones'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsScreen()));
+              },
+            ),
+>>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e
             const Divider(),
             ListTile(
               leading: const Icon(Icons.exit_to_app, color: Colors.red),
@@ -204,8 +221,12 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
+<<<<<<< HEAD
         return Container(
           width: double.infinity,
+=======
+        return Padding(
+>>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e
           padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -238,12 +259,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
                     reporte.fotoUrl,
+<<<<<<< HEAD
                     height: 200,
                     width: double.infinity,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) => Container(
                       height: 200,
                       width: double.infinity,
+=======
+                    height: 150,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      height: 150,
+>>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e
                       color: Colors.grey[200],
                       child: const Icon(Icons.broken_image, size: 50, color: Colors.grey),
                     ),

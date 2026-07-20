@@ -43,7 +43,10 @@ dependencies:
   latlong2: ^0.10.1
   geolocator: ^14.0.3
   image_picker: ^1.2.3
+<<<<<<< HEAD
   geocoding: ^5.0.0
+=======
+>>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e
 
 dev_dependencies:
   flutter_test:
