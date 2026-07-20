@@ -1,9 +1,6 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
-<<<<<<< HEAD
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
-=======
->>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e
 
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
@@ -17,7 +14,4 @@ class DefaultFirebaseOptions {
     );
   }
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e

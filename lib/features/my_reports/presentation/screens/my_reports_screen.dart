@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
-<<<<<<< HEAD
 import '../../../reports/data/reports_repository.dart';
-=======
->>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e
 import '../../../reports/domain/models/report_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -23,16 +20,11 @@ class MyReportsScreen extends StatelessWidget {
       );
     }
 
-<<<<<<< HEAD
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mis Reportes'),
       ),
-=======
-    return Scaffold(
-      appBar: AppBar(title: const Text('Mis Reportes')),
->>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e
       body: StreamBuilder<QuerySnapshot>(
         // Consultamos directamente usando el ID del ciudadano
         stream: FirebaseFirestore.instance
@@ -49,14 +41,7 @@ class MyReportsScreen extends StatelessWidget {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-<<<<<<< HEAD
                 child: Text('Falta crear el índice en Firestore o hay un error de conexión.\n\nDetalle: ${snapshot.error}', textAlign: TextAlign.center),
-=======
-                child: Text(
-                  'Falta crear el índice en Firestore o hay un error de conexión.\n\nDetalle: ${snapshot.error}',
-                  textAlign: TextAlign.center,
-                ),
->>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e
               ),
             );
           }
@@ -71,13 +56,7 @@ class MyReportsScreen extends StatelessWidget {
             );
           }
 
-<<<<<<< HEAD
           final reportes = snapshot.data!.docs.map((doc) => ReportModel.fromFirestore(doc)).toList();
-=======
-          final reportes = snapshot.data!.docs
-              .map((doc) => ReportModel.fromFirestore(doc))
-              .toList();
->>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e
           reportes.sort((a, b) => b.fechaRegistro.compareTo(a.fechaRegistro));
 
           return ListView.builder(
@@ -88,7 +67,6 @@ class MyReportsScreen extends StatelessWidget {
               return Card(
                 elevation: 3,
                 margin: const EdgeInsets.only(bottom: 16),
-<<<<<<< HEAD
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
@@ -179,101 +157,6 @@ class MyReportsScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-=======
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (reporte.fotoUrl.isNotEmpty)
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(12),
-                        ),
-                        child: Image.network(
-                          reporte.fotoUrl,
-                          height: 150,
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    else
-                      Container(
-                        height: 150,
-                        decoration: const BoxDecoration(
-                          color: Colors.black12,
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(12),
-                          ),
-                        ),
-                        child: const Icon(
-                          Icons.image_not_supported,
-                          size: 50,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  reporte.titulo,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: _getColorForEstado(
-                                    reporte.estado,
-                                  ).withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: _getColorForEstado(reporte.estado),
-                                  ),
-                                ),
-                                child: Text(
-                                  reporte.estado.toUpperCase(),
-                                  style: TextStyle(
-                                    color: _getColorForEstado(reporte.estado),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            reporte.descripcion,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(color: Colors.black87),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Categoría: ${reporte.categoria}',
-                            style: TextStyle(
-                              color: theme.colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
->>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e
                 ),
               );
             },
@@ -283,7 +166,6 @@ class MyReportsScreen extends StatelessWidget {
     );
   }
 
-<<<<<<< HEAD
   void _showReportDetails(BuildContext context, ReportModel reporte) {
     showModalBottomSheet(
       context: context,
@@ -392,20 +274,6 @@ class MyReportsScreen extends StatelessWidget {
       case 'en progreso': return Colors.purple;
       case 'resuelto': return Colors.green;
       default: return Colors.grey;
-=======
-  Color _getColorForEstado(String estado) {
-    switch (estado.toLowerCase()) {
-      case 'nuevo':
-        return Colors.blue;
-      case 'asignado':
-        return Colors.orange;
-      case 'en progreso':
-        return Colors.purple;
-      case 'resuelto':
-        return Colors.green;
-      default:
-        return Colors.grey;
->>>>>>> 0bd1db2ae59b711b77950465653c6fac077d978e
     }
   }
 }
