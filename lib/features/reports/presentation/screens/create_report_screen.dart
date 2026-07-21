@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:path/path.dart' as p;
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../data/reports_repository.dart';
+import '../../../../core/services/gemini_service.dart';
 
 class CreateReportScreen extends StatefulWidget {
   const CreateReportScreen({super.key});
@@ -160,9 +161,18 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
 
     try {
       String fotoUrl = '';
+      String prioridadIA = 'No evaluada';
+      String justificacionIA = 'No se adjuntó imagen para que la IA evalúe.';
 
-      // Subir imagen a Firebase Storage si hay una
+      // Subir imagen a Firebase Storage y analizar con IA si hay una
       if (_imagenSeleccionada != null) {
+        // 1. Analizar con Gemini AI
+        final geminiService = GeminiService();
+        final iaResult = await geminiService.analyzeReportPriority(_descCtrl.text, _imagenSeleccionada!.path);
+        prioridadIA = iaResult.prioridad;
+        justificacionIA = iaResult.justificacion;
+
+        // 2. Subir a Storage
         final fileName = 'reportes/${DateTime.now().millisecondsSinceEpoch}_${_imagenSeleccionada!.name}';
         final ref = FirebaseStorage.instance.ref().child(fileName);
         
@@ -186,6 +196,8 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
         fotoUrl: fotoUrl,
         categoria: _categoriaSeleccionada ?? 'General',
         prioridad: _prioridadSeleccionada,
+        prioridadIA: prioridadIA,
+        justificacionIA: justificacionIA,
       );
 
       if (mounted) {

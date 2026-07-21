@@ -12,6 +12,9 @@ class ReportModel {
   final String estado; // Nuevo, En Progreso, Resuelto, etc.
   final DateTime fechaRegistro;
   final String categoria;
+  final String prioridad;
+  final String prioridadIA;
+  final String justificacionIA;
 
   ReportModel({
     required this.id,
@@ -25,6 +28,9 @@ class ReportModel {
     required this.estado,
     required this.fechaRegistro,
     required this.categoria,
+    required this.prioridad,
+    required this.prioridadIA,
+    required this.justificacionIA,
   });
 
   factory ReportModel.fromFirestore(DocumentSnapshot doc) {
@@ -51,6 +57,9 @@ class ReportModel {
       estado: data['estado'] ?? 'Nuevo',
       fechaRegistro: parsedDate,
       categoria: data['categoria'] ?? 'General',
+      prioridad: data['prioridad'] ?? 'Media',
+      prioridadIA: data['prioridadIA'] ?? '',
+      justificacionIA: data['justificacionIA'] ?? '',
     );
   }
 }

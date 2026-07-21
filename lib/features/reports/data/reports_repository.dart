@@ -30,6 +30,8 @@ class ReportsRepository {
     required String fotoUrl,
     required String categoria,
     required String prioridad,
+    required String prioridadIA,
+    required String justificacionIA,
   }) async {
     final counterRef = _firestore.collection('sistema').doc('contadores');
     
@@ -58,6 +60,8 @@ class ReportsRepository {
       'fecha': FieldValue.serverTimestamp(),
       'categoria': categoria,
       'prioridad': prioridad,
+      'prioridadIA': prioridadIA,
+      'justificacionIA': justificacionIA,
       'historial': [
         {
           'accion': 'Reporte Creado',
